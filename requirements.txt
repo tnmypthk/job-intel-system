@@ -1,0 +1,9 @@
+crewai
+crewai-tools
+streamlit
+anthropic
+tavily-python
+python-dotenv
+httpx
+beautifulsoup4
+mcp
