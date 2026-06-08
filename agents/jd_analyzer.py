@@ -1,10 +1,11 @@
 from crewai import Agent, LLM
+from config import MODEL
 from crewai_tools import ScrapeWebsiteTool
 import os
 
 def create_jd_analyzer():
     llm = LLM(
-        model="claude-haiku-4-5-20251001",
+        model=MODEL,
         api_key=os.getenv("ANTHROPIC_API_KEY")
     )
 

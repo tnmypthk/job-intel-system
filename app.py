@@ -1,6 +1,7 @@
 import streamlit as st
 from dotenv import load_dotenv
 import re
+from gmail_helper import create_gmail_draft
 from crewai import Crew, Process
 from agents.jd_analyzer import create_jd_analyzer
 from agents.company_researcher import create_company_researcher
@@ -13,6 +14,7 @@ from tasks.task_definitions import (
     create_skills_gap_task,
     create_resume_tailor_task,
     create_interview_prep_task
+
 )
 
 load_dotenv()
@@ -303,11 +305,27 @@ if "results" in st.session_state:
         st.markdown(output.split("## COVER LETTER")[0] if "## COVER LETTER" in output else output)
     with tab5:
         output = st.session_state.results["interview"]
-        if "## COVER LETTER" in output:
-            cover = "## COVER LETTER" + output.split("## COVER LETTER")[1]
-            st.markdown(cover)
-            st.write("")
-            st.download_button("⬇  Download cover letter", cover,
-                               file_name="cover_letter.txt", mime="text/plain")
-        else:
-            st.markdown(output)
+    if "## COVER LETTER" in output:
+        cover = "## COVER LETTER" + output.split("## COVER LETTER")[1]
+        st.markdown(cover)
+        st.write("")
+
+        col1, col2 = st.columns(2)
+        with col1:
+            st.download_button(
+                "⬇  Download cover letter",
+                cover,
+                file_name="cover_letter.txt",
+                mime="text/plain"
+            )
+        with col2:
+            if st.button("📧  Create Gmail draft"):
+                try:
+                    clean_text = cover.replace("## COVER LETTER", "").strip()
+                    subject = f"Application: {role_name} at {company_name}"
+                    create_gmail_draft(subject, clean_text)
+                    st.success("Draft created — check your Gmail Drafts folder.")
+                except Exception as e:
+                    st.error(f"Gmail error: {str(e)}")
+    else:
+        st.markdown(output)

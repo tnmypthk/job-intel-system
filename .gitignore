@@ -5,3 +5,5 @@ __pycache__/
 resume.txt
 *.pyc
 .crewai/
+credentials.json
+token.pickle

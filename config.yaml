@@ -1,0 +1,10 @@
+llm:
+  model: "claude-haiku-4-5-20251001"
+
+agents:
+  max_iter: 8
+
+# Used by main.py only — app.py takes URL from Streamlit UI
+dev:
+  job_url: "https://job-boards.greenhouse.io/remotecom/jobs/7747671003"
+  resume_file: "resume.txt"

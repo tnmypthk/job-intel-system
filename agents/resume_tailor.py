@@ -1,9 +1,10 @@
 from crewai import Agent, LLM
+from config import MODEL
 import os
 
 def create_resume_tailor():
     llm = LLM(
-        model="claude-haiku-4-5-20251001",
+        model=MODEL,
         api_key=os.getenv("ANTHROPIC_API_KEY")
     )
 

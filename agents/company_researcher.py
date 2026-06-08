@@ -1,4 +1,5 @@
 from crewai import Agent, LLM
+from config import MODEL,MAX_ITER
 from crewai.tools import tool
 from tavily import TavilyClient
 import os
@@ -15,9 +16,10 @@ def web_search(query: str) -> str:
 
 def create_company_researcher():
     llm = LLM(
-        model="claude-haiku-4-5-20251001",
+        model=MODEL,
         api_key=os.getenv("ANTHROPIC_API_KEY")
     )
+    
 
     return Agent(
         role="Company Research Specialist",
@@ -36,5 +38,5 @@ def create_company_researcher():
         llm=llm,
         verbose=True,
         allow_delegation=False,
-        max_iter=8
+        max_iter=MAX_ITER
     )
