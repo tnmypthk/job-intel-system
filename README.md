@@ -1,4 +1,5 @@
 ## Live Demo
+
 👉 [job-intel-system.streamlit.app](https://job-intel-system-anhqhoylsxstrtddfg4ulr.streamlit.app)
 
 # Job Application Intelligence System
@@ -13,7 +14,10 @@ questions, and write a cover letter.
 ## Agent Architecture
 
 Five CrewAI agents run in sequence, each building on the previous agent's output:
+
+```
 JD Analyzer → Company Researcher → Skills Gap Scorer → Resume Tailor → Interview Prep Writer
+```
 
 | Agent | What it does | Tools |
 |---|---|---|
@@ -31,6 +35,7 @@ JD Analyzer → Company Researcher → Skills Gap Scorer → Resume Tailor → I
 - **LLM**: Anthropic Claude (claude-haiku-4-5)
 - **Web search**: Tavily
 - **UI**: Streamlit
+- **MCP integration**: Gmail API (cover letter draft — local)
 - **Language**: Python 3.11
 
 ---
@@ -47,7 +52,7 @@ JD Analyzer → Company Researcher → Skills Gap Scorer → Resume Tailor → I
 
 ```bash
 # 1. Clone the repo
-git clone https://github.com/yourusername/job-intel-system.git
+git clone https://github.com/tnmypthk/job-intel-system.git
 cd job-intel-system
 
 # 2. Create and activate virtual environment
@@ -92,22 +97,30 @@ streamlit run app.py
 ---
 
 ## Project Structure
+
+```
 job-intel-system/
-    ├── agents/
-    │   ├── jd_analyzer.py
-    │   ├── company_researcher.py
-    │   ├── skills_gap_scorer.py
-    │   ├── resume_tailor.py
-    │   └── interview_prep_writer.py
-    ├── tasks/
-    │   └── task_definitions.py
-    ├── tools/
-    │   └── search_tools.py
-    ├── app.py               # Streamlit UI
-    ├── main.py              # CLI runner for testing individual agents
-    ├── requirements.txt
-    ├── .env.example
-    └── README.md
+├── agents/
+│   ├── jd_analyzer.py
+│   ├── company_researcher.py
+│   ├── skills_gap_scorer.py
+│   ├── resume_tailor.py
+│   └── interview_prep_writer.py
+├── tasks/
+│   └── task_definitions.py
+├── tools/
+│   └── search_tools.py
+├── app.py               # Streamlit UI (production entry point)
+├── main.py              # CLI runner for testing individual agents
+├── gmail_helper.py      # Gmail API integration for cover letter drafts
+├── auth_gmail.py        # One-time Gmail OAuth authentication script
+├── config.yaml          # Centralised config — model, max_iter, dev defaults
+├── config.py            # Loads config.yaml and exports constants
+├── requirements.txt
+├── .env.example
+├── .python-version      # Pins Python 3.11 for Streamlit Cloud
+└── README.md
+```
 
 ---
 
@@ -115,8 +128,8 @@ job-intel-system/
 
 - [x] Five-agent CrewAI pipeline
 - [x] Streamlit dashboard with metric cards and styled tabs
+- [x] Gmail MCP — auto-create cover letter as Gmail draft (local)
 - [ ] Google Drive MCP — read resume from Drive instead of pasting
-- [ ] Gmail MCP — auto-create cover letter as Gmail draft
 - [ ] Upgrade to claude-sonnet-4-6 for production-quality output
 - [ ] PDF resume upload support
 - [ ] Save and compare multiple job analyses
@@ -126,7 +139,7 @@ job-intel-system/
 ## Built With
 
 Built as a hands-on project to demonstrate multi-agent AI systems, LLM integration,
-web search automation, and MCP integration (coming soon).
+web search automation, config-driven architecture, and Gmail MCP integration.
 
 ---
 
@@ -135,3 +148,4 @@ web search automation, and MCP integration (coming soon).
 - Avoid LinkedIn job URLs — they block scrapers. Use Greenhouse or Lever URLs.
 - `resume.txt` is gitignored — never commit your resume to a public repo.
 - `main.py` is a CLI test runner. The production entry point is `app.py`.
+- The Gmail draft button requires local OAuth setup (`python auth_gmail.py`) and does not run on Streamlit Cloud.
